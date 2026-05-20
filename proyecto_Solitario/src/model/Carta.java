@@ -1,9 +1,13 @@
 package model;
 
+import java.sql.SQLException;
+
+import dao.DaoCarta;
+
 public class Carta {
 
 	
-	private int idCarta;
+
 	private int valor;
 	private Palo palo;
 	private ColorCarta color;
@@ -12,9 +16,8 @@ public class Carta {
 	public Carta() {
 	}
 	
-	public Carta(int idCarta, int valor, Palo palo, ColorCarta color) {
+	public Carta(int valor, Palo palo, ColorCarta color) {
 		
-		this.idCarta = idCarta;
 		this.valor = valor;
 		this.palo = palo;
 		this.color = color;
@@ -23,13 +26,7 @@ public class Carta {
 
 	
 	//================GETTERS Y SETTERS===================
-	public int getIdCarta() {
-		return idCarta;
-	}
-
-	public void setIdCarta(int idCarta) {
-		this.idCarta = idCarta;
-	}
+	
 
 	public int getValor() {
 		return valor;
@@ -70,11 +67,11 @@ public class Carta {
 	}
 	
 	public boolean esRoja() {
-		return this.color == ColorCarta.Rojo;
+		return this.color == ColorCarta.ROJO;
 	}
 	
 	public boolean esNegro() {
-		return this.color == ColorCarta.Negro;
+		return this.color == ColorCarta.NEGRO;
 	}
 	
 	//algunas cartas de poker no tienen valor númerico sino que son letras, es decir, son String.
@@ -99,6 +96,13 @@ public class Carta {
 	public String getNombreCompleto() {
 		return getNombreValor() + " de " + palo;
 	}
+	
+	public void insertarCarta() throws SQLException{
+		
+		DaoCarta.getInstance().insertCarta(this);
+	}
+	
+	
 	
 	@Override
 	
