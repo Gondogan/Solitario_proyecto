@@ -2,8 +2,8 @@ package model;
 
 public enum Palo {
 
-	Corazones,
-	Diamantes,
-	Treboles,
-	Picas
+	CORAZONES,
+	DIAMANTES,
+	TREBOLES,
+	PICAS
 }
