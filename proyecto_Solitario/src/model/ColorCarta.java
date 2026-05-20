@@ -2,6 +2,6 @@ package model;
 
 public enum ColorCarta {
 
-	Rojo,
-	Negro
+	ROJO,
+	NEGRO
 }
