@@ -7,7 +7,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		Carta carta1 = new Carta(13, Palo.PICAS, ColorCarta.NEGRO);
+		Carta carta1 = new Carta(13, Palo.TREBOLES, ColorCarta.NEGRO);
 		
 		try {
 			
