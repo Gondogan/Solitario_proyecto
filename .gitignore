@@ -2,19 +2,22 @@
 # Eclipse / Workspace
 # ======================
 
-# Workspace de Eclipse, nunca debe subirse
 .metadata/
 .recommenders/
 .loadpath
+.factorypath
 
 # Configuración local de Eclipse
 .settings/
 
-# Build Path y configuración del proyecto en Eclipse
-# Se ignoran para que no se modifiquen entre compañeros
+# Archivos de proyecto de Eclipse
 .project
 .classpath
-.factorypath
+
+# Por si están dentro de subcarpetas
+**/.project
+**/.classpath
+**/.settings/
 
 # ======================
 # Compilación Java
@@ -25,22 +28,28 @@ target/
 out/
 build/
 
-# Archivos compilados
+**/bin/
+**/target/
+**/out/
+**/build/
+
 *.class
 
 # ======================
 # JAR / WAR / EAR
 # ======================
 
-# Ignorar JAR generados automáticamente
-*.jar
 *.war
 *.ear
 
-# Pero permitir librerías necesarias del proyecto
-# Ejemplo: lib/mysql-connector-j-8.x.x.jar
+# Ignorar JAR generados fuera de lib
+*.jar
+
+# Permitir librerías dentro de lib
 !lib/
 !lib/*.jar
+!**/lib/
+!**/lib/*.jar
 
 # ======================
 # Logs y temporales
@@ -55,11 +64,8 @@ build/
 # Sistema operativo
 # ======================
 
-# Windows
 Thumbs.db
 desktop.ini
-
-# Mac
 .DS_Store
 
 # ======================
