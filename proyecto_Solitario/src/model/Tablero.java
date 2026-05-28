@@ -44,9 +44,18 @@ public class Tablero {
     public void setDescarte(Descarte descarte) {
         this.descarte = descarte;
     }
+    
+    public boolean existeColumna(int numeroColumna) {
+    	return numeroColumna >= 0 && numeroColumna <columnas.size();
+    }
 
+ // Añade una carta a una columna si la columna existe.
     public void agregarCartaAColumna(int numeroColumna, Carta carta) {
-        columnas.get(numeroColumna).add(carta);
+        if (existeColumna(numeroColumna)) {
+            columnas.get(numeroColumna).add(carta);
+        } else {
+            System.out.println("La columna " + numeroColumna + " no existe.");
+        }
     }
 
     public Carta obtenerUltimaCarta(int numeroColumna) {
@@ -128,7 +137,6 @@ public class Tablero {
             //setBocaArriba = false porque al volver al mazo dejan de estar visibles
         }
 
-        Collections.reverse(cartasDevueltas);
 
         mazo.agregarCartas(cartasDevueltas);
     }
