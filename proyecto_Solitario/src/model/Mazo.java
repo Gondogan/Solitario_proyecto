@@ -63,8 +63,6 @@ public class Mazo {
 			
 			if(carta != null) {
 				cartasRobadas.add(carta);
-			}else {
-				break; //xd, este está fácil de ver, comprobación para ver si os leeis el código
 			}
 		}
 		
