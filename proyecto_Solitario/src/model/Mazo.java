@@ -71,7 +71,7 @@ public class Mazo {
 	}
 	
 	//estos métodos sirven para agregar las cartas de la pila de descartes al mazo de nuevo
-	public void agrgarCarta(Carta carta) {
+	public void agregarCarta(Carta carta) {
 		cartas.add(carta);
 	}
 	
