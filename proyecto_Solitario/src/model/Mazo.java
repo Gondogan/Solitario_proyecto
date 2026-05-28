@@ -67,8 +67,8 @@ public class Mazo {
 	}
 	
 	//estos métodos sirven para agregar las cartas de la pila de descartes al mazo de nuevo
-	public void agregarCarta(Carta carta) {
-		cartas.add(carta);
+	public void agregarCarta(Carta cartaIn) {
+		cartas.add(cartaIn);
 	}
 	
 	public void agregarCartas(List<Carta> nuevasCartas) {
@@ -83,15 +83,6 @@ public class Mazo {
 	
 	public int numeroCartas() {
 		return cartas.size();
-	}
-	
-	 public void agregarCartas(List<Carta> nuevasCartas) {
-	        //el método addAll() es un método que agrega todos los objetos que estén en el arraylist que le llega
-	        cartas.addAll(nuevasCartas);
-	    }
-	
-	public void agregarCarta(Carta cartaIn) {
-		cartas.add(cartaIn);
 	}
 	
 	public void seleccionarTodasCartas () throws SQLException{
