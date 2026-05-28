@@ -1,69 +1,92 @@
-
-
 # ======================
-#  Eclipse (CRÍTICO)
+# Eclipse / Workspace
 # ======================
+
 .metadata/
 .recommenders/
 .loadpath
+.factorypath
 
-# Configuración local (NO compartir entre equipo)
+# Configuración local de Eclipse
 .settings/
 
-# Estos puedes decidir:
-# Si TODOS usáis Eclipse igual → puedes subirlos
-# Si no → mejor ignorarlos
+# Archivos de proyecto de Eclipse
 .project
 .classpath
+
+# Por si están dentro de subcarpetas
+**/.project
+**/.classpath
+**/.settings/
 
 # ======================
 # Compilación Java
 # ======================
+
 bin/
 target/
 out/
 build/
 
-# Archivos compilados
+**/bin/
+**/target/
+**/out/
+**/build/
+
 *.class
-*.jar
+
+# ======================
+# JAR / WAR / EAR
+# ======================
+
 *.war
 *.ear
+
+# Ignorar JAR generados fuera de lib
+*.jar
+
+# Permitir librerías dentro de lib
+!lib/
+!lib/*.jar
+!**/lib/
+!**/lib/*.jar
 
 # ======================
 # Logs y temporales
 # ======================
+
 *.log
 *.tmp
 *.bak
 *.swp
 
 # ======================
-#  Sistema operativo
+# Sistema operativo
 # ======================
-# Windows
+
 Thumbs.db
 desktop.ini
-
-# Mac
 .DS_Store
 
 # ======================
-# Otros IDEs (por si acaso)
+# Otros IDEs
 # ======================
+
 .idea/
 *.iml
 .vscode/
 
 # ======================
-#  Archivos problemáticos (tu error de antes)
+# Archivos problemáticos de Eclipse / WebView
 # ======================
+
 **/EBWebView/**
 **/Network/**
 **/Cookies
 
 # ======================
-#  Archivos de usuario
+# Archivos de usuario / bloqueo
 # ======================
+
 *.lock
 *.pid
