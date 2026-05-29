@@ -15,7 +15,7 @@ public class Main {
 		
 		Mazo miMazo = new Mazo();
 		
-try {
+		try {
 			
 			miMazo.insertarCartas();
 			miMazo.seleccionarTodasCartas();
@@ -24,7 +24,8 @@ try {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+		}
+		
 		//METODO PARA INSERTAR TODAS LAS CARTAS
 		/*
 		try {
@@ -69,7 +70,6 @@ try {
 		
 		
 		
-		
 		/*Carta carta1 = new Carta(13, Palo.TREBOLES, ColorCarta.NEGRO);
 		System.out.println("Funcionaa");
 		
@@ -105,5 +105,5 @@ try {
         System.out.println("Descarte después: " + descarte);
    */
 	}
-	}
 }
+
