@@ -1,7 +1,5 @@
 package model;
 
-public class vistaTablero {
+public class VistaTablero {
 
-	
-	
 }
