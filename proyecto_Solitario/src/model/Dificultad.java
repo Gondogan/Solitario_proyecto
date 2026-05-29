@@ -4,5 +4,7 @@ public enum Dificultad {
 	
 	Facil,
 	Medio, 
-	Dificil
+	Dificil;
+	
+	private int cantidad;
 }
