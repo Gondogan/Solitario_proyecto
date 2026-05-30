@@ -2,7 +2,6 @@ package model;
 
 public class Jugador {
 
-	private int idJugador;
 	private String nombreUsuario;
 	private String password;
 
@@ -17,23 +16,8 @@ public class Jugador {
 		this.password = password;
 	}
 
-	public Jugador(int idJugador, String nameJugador, String password) {
-		
-		this.idJugador = idJugador;
-		this.nombreUsuario = nameJugador;
-		this.password = password;
-	}
 
 	//=================== GETTERS Y SETTERS ===========================
-	
-	public int getIdJugador() {
-		return idJugador;
-	}
-
-	public void setIdJugador(int idJugador) {
-		this.idJugador = idJugador;
-	}
-	
 	
 	public String getNombreUsuario() {
 		return nombreUsuario;
