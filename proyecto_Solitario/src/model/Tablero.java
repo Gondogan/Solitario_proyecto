@@ -100,7 +100,7 @@ public class Tablero {
     }
 
     //METODOS VARIOS
-    public void pedirCartasDelMazo() {
+    public void pedirCartasDelMazo(int cartasARobar) {
     	// Si el mazo está vacío, reciclamos las cartas del descarte y terminamos el método
     	if (mazo.estaVacia()) {
     	    reciclarDescarteAMazo();

@@ -7,13 +7,15 @@ public class Partida {
 	private Tablero tablero;
 	private boolean partidaTerminada;
 	private int movimientos;
+	private Dificultad dificultad;
 	
-	public Partida() {
+	public Partida(Dificultad dificultad) {
 		
 		this.jugador = new Jugador();
 		this.tablero = new Tablero();
 		this.partidaTerminada = false;
 		this.movimientos = 0;
+		this.dificultad = dificultad;
 		
 	}
 	
@@ -71,7 +73,7 @@ public class Partida {
 
     // Pide cartas del mazo y las manda al descarte
     public void pedirCartas() {
-        tablero.pedirCartasDelMazo();
+        tablero.pedirCartasDelMazo(dificultad.getCartasARobar());
         movimientos++;
     }
 
