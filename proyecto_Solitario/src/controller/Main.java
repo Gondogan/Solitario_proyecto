@@ -12,7 +12,7 @@ import model.Palo;
 
 public class Main {
 
-	
+	public static void main(String[] args) {
     // ===== TEST FUNDACION =====
 
     // 1. Creamos las 4 fundaciones vacías, una por palo
@@ -20,7 +20,7 @@ public class Main {
     Fundacion fDiamantes = new Fundacion(Palo.DIAMANTES);
     Fundacion fTreboles  = new Fundacion(Palo.TREBOLES);
     Fundacion fPicas     = new Fundacion(Palo.PICAS);
-
+    
     // 2. Mostramos cómo se ven vacías (fondo negro + símbolo en color)
     System.out.println("--- Fundaciones VACÍAS ---");
     System.out.println(fCorazones);
@@ -63,7 +63,7 @@ public class Main {
     System.out.println("Treboles:  " + fTreboles.numeroCartas());
     System.out.println("Picas:     " + fPicas.numeroCartas());
 	
-	
+
 	
 	
 	
