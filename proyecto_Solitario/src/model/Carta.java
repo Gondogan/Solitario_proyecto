@@ -80,7 +80,7 @@ public class Carta {
 		switch (valor) {
 		
 		case 1:
-			return "As";
+			return "A";
 		case 11:
 			return "J";
 		case 12:
@@ -94,7 +94,7 @@ public class Carta {
 	}
 	
 	public String getNombreCompleto() {
-		return getNombreValor() + " de " + palo;
+		return  "\u001B[47m\u001B[30m\u001B[1m" + "[" + palo.getCodigoColor() + getNombreValor() + palo.getSimbolo() + "\u001B[47m\u001B[30m" + "]" + "\u001B[0m" ;
 	}
 	
 	public void insertarCarta() throws SQLException{
@@ -107,12 +107,13 @@ public class Carta {
 	@Override
 	
 	public String toString() {
+		
 		if(!bocaArriba) {
 			return "[carta oculta]";
 			
 		}
 		
-		return "[" + getNombreCompleto() + "]";
+		return getNombreCompleto();
 	}
 	
 }
