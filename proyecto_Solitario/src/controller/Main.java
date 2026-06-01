@@ -6,16 +6,74 @@ import dao.DaoCarta;
 import model.Carta;
 import model.ColorCarta;
 import model.Descarte;
+import model.Fundacion;
 import model.Mazo;
 import model.Palo;
 
 public class Main {
 
 	public static void main(String[] args) {
+    // ===== TEST FUNDACION =====
+
+    // 1. Creamos las 4 fundaciones vacías, una por palo
+    Fundacion fCorazones = new Fundacion(Palo.CORAZONES);
+    Fundacion fDiamantes = new Fundacion(Palo.DIAMANTES);
+    Fundacion fTreboles  = new Fundacion(Palo.TREBOLES);
+    Fundacion fPicas     = new Fundacion(Palo.PICAS);
+    
+    // 2. Mostramos cómo se ven vacías (fondo negro + símbolo en color)
+    System.out.println("--- Fundaciones VACÍAS ---");
+    System.out.println(fCorazones);
+    System.out.println(fDiamantes);
+    System.out.println(fTreboles);
+    System.out.println(fPicas);
+
+    // 3. Intentamos meter una carta que NO es un As (debe fallar)
+    System.out.println("\n--- Intentamos meter un 5 de Corazones (debe fallar) ---");
+    Carta cartaMala = new Carta(5, Palo.CORAZONES, ColorCarta.ROJO);
+    boolean resultado = fCorazones.agregarCarta(cartaMala);
+    System.out.println("¿Se ha podido meter? " + resultado);
+    System.out.println(fCorazones);
+
+    // 4. Metemos el As de Corazones (debe funcionar)
+    System.out.println("\n--- Metemos el As de Corazones (debe funcionar) ---");
+    Carta as = new Carta(1, Palo.CORAZONES, ColorCarta.ROJO);
+    resultado = fCorazones.agregarCarta(as);
+    System.out.println("¿Se ha podido meter? " + resultado);
+    System.out.println(fCorazones);
+
+    // 5. Metemos el 2 de Corazones encima del As
+    System.out.println("\n--- Metemos el 2 de Corazones ---");
+    Carta dos = new Carta(2, Palo.CORAZONES, ColorCarta.ROJO);
+    resultado = fCorazones.agregarCarta(dos);
+    System.out.println("¿Se ha podido meter? " + resultado);
+    System.out.println(fCorazones);
+
+    // 6. Intentamos meter un 2 de PICAS en la fundacion de Corazones (palo incorrecto)
+    System.out.println("\n--- Intentamos meter un 2 de Picas en Corazones (palo incorrecto) ---");
+    Carta dosPicas = new Carta(2, Palo.PICAS, ColorCarta.NEGRO);
+    resultado = fCorazones.agregarCarta(dosPicas);
+    System.out.println("¿Se ha podido meter? " + resultado);
+    System.out.println(fCorazones);
+
+    // 7. Mostramos cuántas cartas tiene cada fundacion
+    System.out.println("\n--- Número de cartas en cada fundacion ---");
+    System.out.println("Corazones: " + fCorazones.numeroCartas());
+    System.out.println("Diamantes: " + fDiamantes.numeroCartas());
+    System.out.println("Treboles:  " + fTreboles.numeroCartas());
+    System.out.println("Picas:     " + fPicas.numeroCartas());
+	
+
+	
+	
+	
+	/*
+	
+	 public static void main(String[] args) {
 		
 		Mazo miMazo = new Mazo();
 		
-try {
+		try {
 			
 			miMazo.insertarCartas();
 			miMazo.seleccionarTodasCartas();
@@ -24,9 +82,10 @@ try {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+		}
+		
 		//METODO PARA INSERTAR TODAS LAS CARTAS
-		/*
+
 		try {
             // Conectamos con la base de datos a través de tu DAO
             DaoCarta dao = DaoCarta.getInstance();
@@ -69,7 +128,6 @@ try {
 		
 		
 		
-		
 		/*Carta carta1 = new Carta(13, Palo.TREBOLES, ColorCarta.NEGRO);
 		System.out.println("Funcionaa");
 		
@@ -105,5 +163,5 @@ try {
         System.out.println("Descarte después: " + descarte);
    */
 	}
-	}
 }
+
