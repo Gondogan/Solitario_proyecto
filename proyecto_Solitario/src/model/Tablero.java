@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Tablero {
@@ -130,16 +129,12 @@ public class Tablero {
 	// Si el mazo está vacío recicla el descarte; si no, roba según la dificultad
 	// Usamos if-else en lugar de return para controlar el flujo sin cortarlo
 	public void pedirCartasDelMazo(int cartasARobar) {
-		if (mazo.estaVacia()) {
-			reciclarDescarteAMazo();
-		} else {
-			List<Carta> pedidas = mazo.robarCartas(cartasARobar);
-			Collections.reverse(pedidas); // orden correcto para el descarte
-			for (Carta carta : pedidas) {
-				carta.setBocaArriba(true);
-			}
-			descarte.agregarCartas(pedidas);
-		}
+	    if (mazo.estaVacia()) {
+	        reciclarDescarteAMazo();
+	    } else {
+	        List<Carta> pedidas = mazo.robarCartas(cartasARobar);
+	        descarte.agregarCartas(pedidas);
+	    }
 	}
 
 	// Devuelve el descarte al mazo. Si ambos están vacíos avisa y no hace nada
