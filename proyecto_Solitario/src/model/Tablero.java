@@ -108,7 +108,7 @@ public class Tablero {
     	}
 
     	// Robamos 3 cartas del mazo
-    	List<Carta> cartasPedidas = mazo.robarCartas(3);
+    	List<Carta> cartasPedidas = mazo.robarCartas(cartasARobar);
 
     	// Invertimos el orden para que se coloquen correctamente en el descarte
     	Collections.reverse(cartasPedidas);
