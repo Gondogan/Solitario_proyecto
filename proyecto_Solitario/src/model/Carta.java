@@ -107,11 +107,11 @@ public class Carta {
 	@Override
 	
 	public String toString() {
-		/*
+		
 		if(!bocaArriba) {
 			return "[carta oculta]";
 			
-		}*/
+		}
 		
 		return getNombreCompleto();
 	}
