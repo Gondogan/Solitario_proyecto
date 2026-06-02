@@ -147,8 +147,8 @@ public class Menu {
     private Dificultad elegirDificultad() {
         int opcion;
         do {
-            System.out.println("\n===== ELEGIR DIFICULTAD =====");
-            System.out.println("\t1. Fácil (1 carta) | 2. Media (2 cartas) | 3. Difícil (3 cartas)");
+            System.out.println("\n====================== ELEGIR DIFICULTAD ======================\n");
+            System.out.println("\t1. Fácil (1 carta) | 2. Media (2 cartas) | 3. Difícil (3 cartas)\n");
             System.out.print("Elige: ");
             opcion = leerEntero();
             if (opcion < 1 || opcion > 3) { System.out.println("No válido."); }
