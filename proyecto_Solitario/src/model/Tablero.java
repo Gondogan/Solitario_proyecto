@@ -6,163 +6,153 @@ import java.util.List;
 
 public class Tablero {
 
-	//ATRIBUTOS
-    private ArrayList<ArrayList<Carta>> columnas;
-    private Mazo mazo;
-    private Descarte descarte;
+	// 7 columnas del tableau, cada una es una lista de cartas
+	private ArrayList<ArrayList<Carta>> columnas;
 
-    public Tablero() {
-        columnas = new ArrayList<>();
-        mazo = new Mazo();
-        descarte = new Descarte();
+	// 4 fundaciones (una por palo): el objetivo del juego
+	private ArrayList<Fundacion> fundaciones;
 
-        for (int i = 0; i < 7; i++) {
-            columnas.add(new ArrayList<Carta>());
-        }
-    }
+	// Mazo llega ya cargado de la BBDD desde Partida
+	// No lo creamos aquí para no mezclar Model con DAO
+	private Mazo mazo;
 
-    public ArrayList<ArrayList<Carta>> getColumnas() {
-        return columnas;
-    }
+	private Descarte descarte;
 
-    public void setColumnas(ArrayList<ArrayList<Carta>> columnas) {
-        this.columnas = columnas;
-    }
+	// Recibe el mazo con las 52 cartas, crea columnas vacías y 4 fundaciones
+	public Tablero(Mazo mazo) {
+		this.mazo = mazo;
+		this.descarte = new Descarte();
 
-    public Mazo getMazo() {
-        return mazo;
-    }
+		this.columnas = new ArrayList<>();
+		for (int i = 0; i < 7; i++) {
+			columnas.add(new ArrayList<Carta>());
+		}
 
-    public void setMazo(Mazo mazo) {
-        this.mazo = mazo;
-    }
+		this.fundaciones = new ArrayList<>();
+		fundaciones.add(new Fundacion(Palo.CORAZONES));
+		fundaciones.add(new Fundacion(Palo.DIAMANTES));
+		fundaciones.add(new Fundacion(Palo.TREBOLES));
+		fundaciones.add(new Fundacion(Palo.PICAS));
+	}
 
-    public Descarte getDescarte() {
-        return descarte;
-    }
+	// ======== GETTERS Y SETTERS ========
+	public ArrayList<ArrayList<Carta>> getColumnas() {
+		return columnas;
+	}
 
-    public void setDescarte(Descarte descarte) {
-        this.descarte = descarte;
-    }
-    
-    public boolean existeColumna(int numeroColumna) {
-    	return numeroColumna >= 0 && numeroColumna <columnas.size();
-    }
+	public void setColumnas(ArrayList<ArrayList<Carta>> c) {
+		this.columnas = c;
+	}
 
- // Añade una carta a una columna si la columna existe.
-    public void agregarCartaAColumna(int numeroColumna, Carta carta) {
-        if (existeColumna(numeroColumna)) {
-            columnas.get(numeroColumna).add(carta);
-        } else {
-            System.out.println("La columna " + numeroColumna + " no existe.");
-        }
-    }
+	public ArrayList<Fundacion> getFundaciones() {
+		return fundaciones;
+	}
 
-    public Carta obtenerUltimaCarta(int numeroColumna) {
-        ArrayList<Carta> columna = columnas.get(numeroColumna);
+	public void setFundaciones(ArrayList<Fundacion> f) {
+		this.fundaciones = f;
+	}
 
-        if (columna.isEmpty()) {
-            return null;
-        }
+	public Mazo getMazo() {
+		return mazo;
+	}
 
-        return columna.get(columna.size() - 1);
-    }
+	public void setMazo(Mazo mazo) {
+		this.mazo = mazo;
+	}
 
-    public Carta quitarUltimaCarta(int numeroColumna) {
-        ArrayList<Carta> columna = columnas.get(numeroColumna);
+	public Descarte getDescarte() {
+		return descarte;
+	}
 
-        if (columna.isEmpty()) {
-            return null;
-        }
+	public void setDescarte(Descarte descarte) {
+		this.descarte = descarte;
+	}
 
-        return columna.remove(columna.size() - 1);
-    }
+	// ======== MÉTODOS DE COLUMNAS ========
 
-    public void repartirInicial() {
-        mazo.barajar();
+	// Valida que el índice esté en rango (0-6) antes de acceder
+	public boolean existeColumna(int n) {
+		return n >= 0 && n < columnas.size();
+	}
 
-        for (int i = 0; i < columnas.size(); i++) {
-            for (int j = 0; j <= i; j++) {
+	public void agregarCartaAColumna(int n, Carta carta) {
+		if (existeColumna(n)) {
+			columnas.get(n).add(carta);
+		} else if (carta == null) {
+	        System.out.println("No se puede añadir una carta nula."); 
+		}else {
+			System.out.println("La columna " + n + " no existe.");
+		}
+	}
 
-                Carta carta = mazo.robarCarta();
+	// Mira sin quitar. Devuelve null si la columna está vacía
+	public Carta obtenerUltimaCarta(int n) {
+		ArrayList<Carta> col = columnas.get(n);
+		if (col.isEmpty()) {
+			return null;
+		}
+		return col.get(col.size() - 1);
+	}
 
-                if (carta != null) {
-                    if (j == i) {
-                        carta.setBocaArriba(true);
-                    } else {
-                        carta.setBocaArriba(false);
-                    }
+	// Quita y devuelve. Devuelve null si la columna está vacía
+	public Carta quitarUltimaCarta(int n) {
+		ArrayList<Carta> col = columnas.get(n);
+		if (col.isEmpty()) {
+			return null;
+		}
+		return col.remove(col.size() - 1);
+	}
 
-                    columnas.get(i).add(carta);
-                }
-            }
-        }
-    }
+	// ======== REPARTO INICIAL ========
 
-    //METODOS VARIOS
-    public void pedirCartasDelMazo(int cartasARobar) {
-    	// Si el mazo está vacío, reciclamos las cartas del descarte y terminamos el método
-    	if (mazo.estaVacia()) {
-    	    reciclarDescarteAMazo();
-    	    return;
-    	}
+	// Baraja y reparte: C1=1, C2=2... C7=7 cartas. Solo la última boca arriba
+	// Total: 28 cartas al tableau, 24 quedan en el mazo
+	public void repartirInicial() {
+		mazo.barajar();
+		for (int i = 0; i < columnas.size(); i++) {
+			for (int j = 0; j <= i; j++) {
+				Carta carta = mazo.robarCarta();
+				if (carta != null) {
+					// j == i → es la última de esa columna → boca arriba
+					if (j == i) {
+						carta.setBocaArriba(true);
+					} else {
+						carta.setBocaArriba(false);
+					}
+					columnas.get(i).add(carta);
+				}
+			}
+		}
+	}
 
-    	// Robamos 3 cartas del mazo
-    	List<Carta> cartasPedidas = mazo.robarCartas(3);
+	// ======== MAZO Y DESCARTE ========
 
-    	// Invertimos el orden para que se coloquen correctamente en el descarte
-    	Collections.reverse(cartasPedidas);
+	// Si el mazo está vacío recicla el descarte; si no, roba según la dificultad
+	// Usamos if-else en lugar de return para controlar el flujo sin cortarlo
+	public void pedirCartasDelMazo(int cartasARobar) {
+		if (mazo.estaVacia()) {
+			reciclarDescarteAMazo();
+		} else {
+			List<Carta> pedidas = mazo.robarCartas(cartasARobar);
+			Collections.reverse(pedidas); // orden correcto para el descarte
+			for (Carta carta : pedidas) {
+				carta.setBocaArriba(true);
+			}
+			descarte.agregarCartas(pedidas);
+		}
+	}
 
-    	// Ponemos todas las cartas robadas boca arriba
-    	for (Carta carta : cartasPedidas) {
-    	    carta.setBocaArriba(true);
-    	}
-
-    	// Añadimos las cartas robadas al descarte
-    	descarte.agregarCartas(cartasPedidas);
-    }
-
-    public void reciclarDescarteAMazo() {
-        if (descarte.estaVacio()) {
-            System.out.println("No hay cartas en el descarte para devolver al mazo.");
-            return; 
-        //con este return nos aseguramos de que no se devuelvan cartas que no hay
-            }
-
-        //pedimos que descarte nos devuelva todas sus cartas
-        List<Carta> cartasDevueltas = descarte.devolverCartasAlMazo();
-
-        for (Carta carta : cartasDevueltas) {
-            carta.setBocaArriba(false);
-            //setBocaArriba = false porque al volver al mazo dejan de estar visibles
-        }
-
-
-        mazo.agregarCartas(cartasDevueltas);
-    }
-
-  
-    public void mostrarTablero() {
-        System.out.println("MAZO: " + mazo.numeroCartas() + " cartas");
-
-        System.out.println("DESCARTE: ");
-        if (descarte.estaVacio()) {
-            System.out.println("Vacío");
-        } else {
-            System.out.println(descarte.verUltimaCarta());
-        }
-
-        System.out.println("\nCOLUMNAS:");
-
-        for (int i = 0; i < columnas.size(); i++) {
-            System.out.println("Columna " + (i + 1) + ":");
-
-            for (Carta carta : columnas.get(i)) {
-                System.out.println(carta);
-            }
-
-            System.out.println("--------------------");
-        }
-    }
-
+	// Devuelve el descarte al mazo. Si ambos están vacíos avisa y no hace nada
+	public void reciclarDescarteAMazo() {
+		if (descarte.estaVacio()) {
+			System.out.println("No hay cartas en el descarte para devolver al mazo.");
+		} else {
+			List<Carta> devueltas = descarte.devolverCartasAlMazo();
+			for (Carta carta : devueltas) {
+				carta.setBocaArriba(false);
+			}
+			mazo.agregarCartas(devueltas);
+			System.out.println("Mazo reciclado con las cartas del descarte.");
+		}
+	}
 }

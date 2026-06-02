@@ -1,13 +1,18 @@
 package model;
 
+import java.sql.SQLException;
+
+import dao.DaoMazo;
+
 public class Partida {
 
-	// ATRIBUTOS
+	// ========= ATRIBUTOS
 	private Jugador jugador;
 	private Tablero tablero;
 	private boolean partidaTerminada;
 	private int movimientos;
 	private Dificultad dificultad;
+	
 
 	// Si la partida ha terminado en victoria o en abandono
 	// Lo necesita DaoPartida para guardarlo en la BBDD
@@ -22,27 +27,24 @@ public class Partida {
 	// ordenar en el ranking
 	private int tiempoSegundos;
 
-	// CONSTRUCTORES
-	public Partida(Dificultad dificultad) {
-
-		this.jugador = new Jugador();
-		this.tablero = new Tablero();
-		this.partidaTerminada = false;
-		this.movimientos = 0;
-		this.dificultad = dificultad;
-		this.ganada = false;
-		this.tiempoSegundos = 0;
-	}
-
-	public Partida(Jugador jugador, Dificultad dificultad) {
-
-		this.jugador = jugador;
-		this.tablero = new Tablero();
-		this.partidaTerminada = false;
-		this.movimientos = 0;
-		this.ganada = false;
-		this.tiempoSegundos = 0;
-	}
+	// ==========CONSTRUCTORES
+	
+    // Carga las 52 cartas con DaoMazo y crea el Tablero con ellas
+    // Lanza SQLException porque accede a la BBDD
+    public Partida(Jugador jugador, Dificultad dificultad) throws SQLException {
+        this.jugador          = jugador;
+        this.dificultad       = dificultad;
+        this.partidaTerminada = false;
+        this.movimientos      = 0;
+        this.ganada           = false;
+        this.tiempoSegundos   = 0;
+ 
+        // Cargamos el mazo de la BBDD aquí y no en Tablero
+        // para no mezclar la capa Model con la capa DAO
+        Mazo mazo    = DaoMazo.getInstance().selectAll();
+        this.tablero = new Tablero(mazo);
+    }
+ 
 
 	// GETTERS Y SETTERS
 
@@ -116,15 +118,27 @@ public class Partida {
 	// Ejemplo: 45 segundos → "45 seg"
 	public String getTiempoFormateado() {
 
-		int minutos = tiempoSegundos / 60;
-		int segsRestantes = tiempoSegundos % 60;
+	    // Calculamos los segundos transcurridos AHORA mismo
+	    // Si la partida ya terminó usamos tiempoSegundos guardado
+	    // Si todavía está en curso calculamos la diferencia con el momento actual
+	    int segundos;
 
-		if (minutos == 0) {
-			return segsRestantes + " seg";
-		}
+	    if (partidaTerminada) {
+	        segundos = tiempoSegundos;
+	    } else {
+	        segundos = (int) ((System.currentTimeMillis() - tiempoInicio) / 1000);
+	    }
 
-		return minutos + " min " + segsRestantes + " seg";
+	    int minutos       = segundos / 60;
+	    int segsRestantes = segundos % 60;
+
+	    if (minutos == 0) {
+	        return segsRestantes + " seg";
+	    }
+
+	    return minutos + " min " + segsRestantes + " seg";
 	}
+
 
 	// MÉTODOS VARIOS
 
@@ -142,14 +156,14 @@ public class Partida {
 		movimientos++;
 	}
 
-	// Muestra el estado actual de la partida
+	/*// Muestra el estado actual de la partida
 	public void mostrarPartida() {
 		System.out.println("Jugador: " + jugador.getNombreUsuario());
 		System.out.println("Movimientos: " + movimientos);
 		System.out.println("Tiempo: " + getTiempoFormateado());
 		tablero.mostrarTablero();
 	}
-
+*/
 	// Termina la partida, para el tiempo y marca como terminada
 	public void terminarPartida() {
 		detenerTiempo();
@@ -167,5 +181,11 @@ public class Partida {
 	public String toString() {
 		return "Partida de " + jugador.getNombreUsuario() + " | Movimientos: " + movimientos + " | Tiempo: "
 				+ getTiempoFormateado() + " | Ganada: " + ganada + " | Terminada: " + partidaTerminada;
+	}
+
+
+	public Dificultad getDificultad() {
+		
+		return dificultad;
 	}
 }
