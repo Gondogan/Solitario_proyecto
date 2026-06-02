@@ -164,11 +164,19 @@ public class MenuPartida {
         }
     }
  
-    private void salirDeLaPartida() {
+    private void salirDeLaPartida() throws SQLException {
+
+        // Paramos el tiempo y marcamos como terminada
         partida.terminarPartida();
+
+        // ganada ya es false por defecto, no hace falta cambiarla
+        // La guardamos aunque no haya ganado para que aparezca en el historial
+        DaoPartida.getInstance().guardarPartida(partida);
+
+        System.out.println("Has salido de la partida.");
         System.out.println("Movimientos: " + partida.getMovimientos()
                 + " | Tiempo: " + partida.getTiempoFormateado());
-        System.out.println("La partida no se guarda (no has completado las fundaciones).");
+        System.out.println("La partida se ha guardado en tu historial.");
     }
  
     private void victoria() throws SQLException {
