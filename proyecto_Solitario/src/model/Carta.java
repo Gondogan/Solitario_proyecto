@@ -1,33 +1,29 @@
 package model;
 
 import java.sql.SQLException;
-
 import dao.DaoCarta;
 
+// La unidad básica del juego. De ella dependen Mazo, Descarte, Fundacion y Tablero
 public class Carta {
 
-	
+	private int valor; // 1 (As) al 13 (Rey)
+	private Palo palo; // CORAZONES, DIAMANTES, TREBOLES o PICAS
+	private ColorCarta color; // ROJO o NEGRO
+	private boolean bocaArriba; // false = oculta, true = visible
 
-	private int valor;
-	private Palo palo;
-	private ColorCarta color;
-	private boolean bocaArriba;
-	
 	public Carta() {
 	}
+
+	// bocaArriba empieza en false: las cartas al crearse están boca abajo
 	
 	public Carta(int valor, Palo palo, ColorCarta color) {
-		
 		this.valor = valor;
 		this.palo = palo;
 		this.color = color;
 		this.bocaArriba = false;
 	}
 
-	
-	//================GETTERS Y SETTERS===================
-	
-
+	// ======== GETTERS Y SETTERS ========
 	public int getValor() {
 		return valor;
 	}
@@ -56,29 +52,28 @@ public class Carta {
 		return bocaArriba;
 	}
 
-	public void setBocaArriba(boolean bocaArriba) {
-		this.bocaArriba = bocaArriba;
+	public void setBocaArriba(boolean b) {
+		this.bocaArriba = b;
 	}
-	
-	//==========METODOS CARTAS=========================
-	
+
+	// ======== MÉTODOS ========
+
+	// Voltea la carta oculta 
 	public void girar() {
 		this.bocaArriba = !this.bocaArriba;
 	}
-	
+
 	public boolean esRoja() {
 		return this.color == ColorCarta.ROJO;
 	}
-	
+
 	public boolean esNegro() {
 		return this.color == ColorCarta.NEGRO;
 	}
-	
-	//algunas cartas de poker no tienen valor númerico sino que son letras, es decir, son String.
 
+	// Traduce el valor numérico a texto
 	public String getNombreValor() {
 		switch (valor) {
-		
 		case 1:
 			return "A";
 		case 11:
@@ -87,33 +82,30 @@ public class Carta {
 			return "Q";
 		case 13:
 			return "K";
-	//para hacerlo homogéneo convertimos el resto de valores de las cartas, que si son numéricos, a tipo String
 		default:
 			return String.valueOf(valor);
 		}
 	}
-	
+
+	// Construye la representación visual con colores ANSI
+	// Estructura: [fondo blanco][color palo][valor][símbolo][reset]
 	public String getNombreCompleto() {
-		return  "\u001B[47m\u001B[30m\u001B[1m" + "[" + palo.getCodigoColor() + getNombreValor() + palo.getSimbolo() + "\u001B[47m\u001B[30m" + "]" + "\u001B[0m" ;
+		return "\u001B[47m\u001B[30m\u001B[1m" + "[" + palo.getCodigoColor() + getNombreValor() + palo.getSimbolo()
+				+ "\u001B[47m\u001B[30m" + "]" + "\u001B[0m";
 	}
 	
-	public void insertarCarta() throws SQLException{
-		
+	// Método para insertar carta de una en una en la BBBDD
+	public void insertarCarta() throws SQLException {
 		DaoCarta.getInstance().insertCarta(this);
 	}
-	
-	
+
+	// Carta oculta: fondo oscuro. Carta visible: colores ANSI
 	
 	@Override
-	
 	public String toString() {
-		
-		if(!bocaArriba) {
-			return "[carta oculta]";
-			
+		if (!bocaArriba) {
+			return "\u001B[40m\u001B[37m[\uD83C\uDCA0]\u001B[0m";
 		}
-		
 		return getNombreCompleto();
 	}
-	
 }

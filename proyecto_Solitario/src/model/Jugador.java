@@ -2,9 +2,9 @@ package model;
 
 public class Jugador {
 
-	private int Id;
+	private int Id;   // lo asigna MySQL (AUTO_INCREMENT)
 	private String nombreUsuario;
-	private String password;
+	private String password;  // solo necesaria para registro, después se descarta
 
 	// ==================== CONSTRUCTORES ===============================
 
