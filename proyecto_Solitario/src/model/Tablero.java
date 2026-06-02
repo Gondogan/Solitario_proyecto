@@ -132,7 +132,15 @@ public class Tablero {
 	    if (mazo.estaVacia()) {
 	        reciclarDescarteAMazo();
 	    } else {
-	        List<Carta> pedidas = mazo.robarCartas(cartasARobar);
+	    	List<Carta> pedidas = mazo.robarCartas(cartasARobar);
+
+	        // Las cartas entran al descarte en el mismo orden que salen del mazo
+	        // La última robada queda encima (es la visible) 
+	    	
+	        for (Carta carta : pedidas) {
+	            carta.setBocaArriba(true);
+	        }
+
 	        descarte.agregarCartas(pedidas);
 	    }
 	}
