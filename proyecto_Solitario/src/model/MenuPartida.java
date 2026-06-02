@@ -54,18 +54,18 @@ public class MenuPartida {
     private void mostrarOpciones() {
         String lin = linea(38);
         System.out.println("\n" + lin);
-        System.out.printf("| %-38s|\n", " MENU DE JUEGO");
+        System.out.printf("| %-37s|\n", "           MENU DE JUEGO");
         System.out.println(lin);
-        System.out.printf("| %-38s|\n",
+        System.out.printf("| %-37s|\n",
             " Movimientos: " + partida.getMovimientos()
             + "   Tiempo: " + partida.getTiempoFormateado());
         System.out.println(lin);
-        System.out.printf("| %-38s|\n", " [ 1 ]  Pedir cartas del mazo");
-        System.out.printf("| %-38s|\n", " [ 2 ]  Mover descarte a columna");
-        System.out.printf("| %-38s|\n", " [ 3 ]  Mover columna a columna");
-        System.out.printf("| %-38s|\n", " [ 4 ]  Mover carta a fundacion");
+        System.out.printf("| %-37s|\n", " [ 1 ]  Pedir cartas del mazo");
+        System.out.printf("| %-37s|\n", " [ 2 ]  Mover descarte a columna");
+        System.out.printf("| %-37s|\n", " [ 3 ]  Mover columna a columna");
+        System.out.printf("| %-37s|\n", " [ 4 ]  Mover carta a fundacion");
         System.out.println(lin);
-        System.out.printf("| %-38s|\n", " [ 0 ]  Salir de la partida");
+        System.out.printf("| %-37s|\n", " [ 0 ]  Salir de la partida");
         System.out.println(lin);
     }
  

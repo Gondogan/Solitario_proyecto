@@ -34,12 +34,12 @@ public class Menu {
         do {
             String lin = linea(30);
             System.out.println("\n" + lin);
-            System.out.printf("| %-30s|\n", "   SOLITARIO  Klondike");
+            System.out.printf("| %-29s|\n", "         SOLITARIO         ");
             System.out.println(lin);
-            System.out.printf("| %-30s|\n", " [ 1 ]  Iniciar sesion");
-            System.out.printf("| %-30s|\n", " [ 2 ]  Registrarse");
+            System.out.printf("| %-29s|\n", " [ 1 ]  Iniciar sesion");
+            System.out.printf("| %-29s|\n", " [ 2 ]  Registrarse");
             System.out.println(lin);
-            System.out.printf("| %-30s|\n", " [ 0 ]  Salir");
+            System.out.printf("| %-29s|\n", " [ 0 ]  Salir");
             System.out.println(lin);
             System.out.print(" Elige una opcion: ");
             opcion = leerEntero();
@@ -119,13 +119,13 @@ public class Menu {
         do {
             String lin = linea(30);
             System.out.println("\n" + lin);
-            System.out.printf("| %-30s|\n", "   MENU PRINCIPAL");
+            System.out.printf("| %-29s|\n", "      MENU PRINCIPAL");
             System.out.println(lin);
-            System.out.printf("| %-30s|\n", " [ 1 ]  Nueva partida");
-            System.out.printf("| %-30s|\n", " [ 2 ]  Ver ranking");
-            System.out.printf("| %-30s|\n", " [ 3 ]  Ver historial");
+            System.out.printf("| %-29s|\n", " [ 1 ]  Nueva partida");
+            System.out.printf("| %-29s|\n", " [ 2 ]  Ver ranking");
+            System.out.printf("| %-29s|\n", " [ 3 ]  Ver historial");
             System.out.println(lin);
-            System.out.printf("| %-30s|\n", " [ 0 ]  Cerrar sesion");
+            System.out.printf("| %-29s|\n", " [ 0 ]  Cerrar sesion");
             System.out.println(lin);
             System.out.print(" Elige una opcion: ");
             opcion = leerEntero();

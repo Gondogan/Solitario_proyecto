@@ -34,26 +34,22 @@ public class DaoPartida {
 	// Insertamos: id del jugador, movimientos, si ganó y tiempo en segundos
 	// El tiempo lo guardamos en segundos porque es un entero fácil de ordenar en el
 	// ranking
+
 	public boolean guardarPartida(Partida partida) throws SQLException {
 
 		String insertPartida = "INSERT INTO partidas (id_jugador, movimientos, ganada, tiempo_segundos) "
 				+ "VALUES (?, ?, ?, ?)";
 
 		PreparedStatement nuevaPartida = conn.prepareStatement(insertPartida);
-
-		// Necesitamos el id del jugador para la clave foránea de la tabla partidas
 		nuevaPartida.setInt(1, partida.getJugador().getId());
 		nuevaPartida.setInt(2, partida.getMovimientos());
 		nuevaPartida.setBoolean(3, partida.isGanada());
-
-		// Guardamos los segundos en bruto, no el formato "2 min 5 seg"
-		// porque en la BBDD queremos números para poder ordenar por tiempo
 		nuevaPartida.setInt(4, partida.getTiempoSegundos());
 
-		int partidaInsertada = nuevaPartida.executeUpdate();
+		int insertada = nuevaPartida.executeUpdate();
 		nuevaPartida.close();
 
-		if (partidaInsertada > 0) {
+		if (insertada > 0) {
 			System.out.println("Partida guardada correctamente.");
 			return true;
 		} else {
@@ -68,40 +64,57 @@ public class DaoPartida {
 	// JOIN une partidas con jugadores para obtener el nombre
 	// GROUP BY agrupa todas las partidas de cada jugador
 	// WHERE ganada = true cuenta solo las victorias
+
 	public void mostrarRanking() throws SQLException {
 
-		String selectRanking = "SELECT j.nombre_usuario, " + "COUNT(*) AS partidas_ganadas, "
-				+ "MIN(p.movimientos) AS mejor_movimientos, " + "MIN(p.tiempo_segundos) AS mejor_tiempo "
-				+ "FROM partidas p " + "JOIN jugadores j ON p.id_jugador = j.id " + "WHERE p.ganada = true "
-				+ "GROUP BY j.nombre_usuario " + "ORDER BY partidas_ganadas DESC, mejor_tiempo ASC";
+		String selectRanking = "SELECT j.nombre_usuario, " + "COUNT(*) AS ganadas, "
+				+ "MIN(p.movimientos) AS mejor_movs, " + "MIN(p.tiempo_segundos) AS mejor_tiempo " + "FROM partidas p "
+				+ "JOIN jugadores j ON p.id_jugador = j.id " + "WHERE p.ganada = true " + "GROUP BY j.nombre_usuario "
+				+ "ORDER BY ganadas DESC, mejor_tiempo ASC";
 
 		Statement consultaRanking = conn.createStatement();
 		ResultSet resultadoRanking = consultaRanking.executeQuery(selectRanking);
 
 		System.out.println("\n===== RANKING =====");
+		// Anchos de cada columna (incluyendo espacios de margen)
+		// Calculados para que quepan todos los valores posibles
+		int aPos = 4; // "# " → máx 2 dígitos
+		int aNombre = 18; // "Nombre" → máx 16 caracteres
+		int aVict = 11; // "Victorias" → máx 3 dígitos
+		int aMovs = 12; // "Mejor movs" → máx 3 dígitos
+		int aTiempo = 15; // "Mejor tiempo" → máx "10 min 59 seg"
 
-		int posicion = 1;
-		boolean hayResultados = resultadoRanking.next();
+		String sep = separador(aPos, aNombre, aVict, aMovs, aTiempo);
 
-		while (hayResultados) {
+		System.out.println();
+		System.out.println(sep);
+		// Cabecera de la tabla
+		System.out.println(
+				fila(aPos, aNombre, aVict, aMovs, aTiempo, "#", "Nombre", "Victorias", "Mejor movs", "Mejor tiempo"));
+		System.out.println(sep);
 
+		int pos = 1;
+		boolean hayFilas = resultadoRanking.next();
+
+		while (hayFilas) {
 			String nombre = resultadoRanking.getString("nombre_usuario");
-			int ganadas = resultadoRanking.getInt("partidas_ganadas");
-			int movimientos = resultadoRanking.getInt("mejor_movimientos");
-
-			// Los segundos los convertimos al formato legible solo para mostrar por
-			// pantalla
+			String vict = String.valueOf(resultadoRanking.getInt("ganadas"));
+			String movs = String.valueOf(resultadoRanking.getInt("mejor_movs"));
 			String tiempo = formatearTiempo(resultadoRanking.getInt("mejor_tiempo"));
 
-			System.out.println(posicion + ". " + nombre + " | Victorias: " + ganadas + " | Mejor marca: " + movimientos
-					+ " mov en " + tiempo);
+			System.out.println(
+					fila(aPos, aNombre, aVict, aMovs, aTiempo, String.valueOf(pos), nombre, vict, movs, tiempo));
 
-			posicion++;
-			hayResultados = resultadoRanking.next();
+			pos++;
+			hayFilas = resultadoRanking.next();
 		}
 
-		if (posicion == 1) {
-			System.out.println("Todavía no hay partidas ganadas.");
+		System.out.println(sep);
+
+		// Si no había ninguna fila, avisamos dentro de la tabla
+		if (pos == 1) {
+			System.out.println("| Todavia no hay partidas ganadas.                               |");
+			System.out.println(sep);
 		}
 
 		System.out.println("===================\n");
@@ -113,6 +126,7 @@ public class DaoPartida {
 	// Muestra el historial completo de partidas de un jugador concreto
 	// Incluye todas las partidas, ganadas y perdidas, de más reciente a más antigua
 	// ORDER BY id DESC → las más recientes primero porque tienen id más alto
+
 	public void mostrarHistorial(int idJugador) throws SQLException {
 
 		String selectHistorial = "SELECT ganada, movimientos, tiempo_segundos " + "FROM partidas "
@@ -125,42 +139,85 @@ public class DaoPartida {
 
 		System.out.println("\n===== TU HISTORIAL =====");
 
+		// Anchos de cada columna
+		int aNum = 4; // "#"
+		int aResultado = 12; // "ABANDONADA" = 10 chars → 12 con margen
+		int aMovs = 13; // "Movimientos" = 11 chars → 13 con margen
+		int aTiempo = 15; // "10 min 59 seg" = 13 chars → 15 con margen
+
+		String sep = separador(aNum, aResultado, aMovs, aTiempo);
+
+		System.out.println();
+		System.out.println(sep);
+		System.out.println(fila(aNum, aResultado, aMovs, aTiempo, "#", "Resultado", "Movimientos", "Tiempo"));
+		System.out.println(sep);
+
 		int num = 1;
-		boolean hayPartidas = resultadoHistorial.next();
+		boolean hayFilas = resultadoHistorial.next();
 
-		while (hayPartidas) {
-
-			// Convertimos el boolean de la BBDD a un texto claro para el jugador
-			String resultado = resultadoHistorial.getBoolean("ganada") ? "GANADA ✓" : "PERDIDA ✗";
-			int movimientos = resultadoHistorial.getInt("movimientos");
-
-			// Los segundos los convertimos al formato legible solo para mostrar por
-			// pantalla
+		while (hayFilas) {
+			// true = ganada, false = abandonada
+			String resultado = resultadoHistorial.getBoolean("ganada") ? "GANADA" : "ABANDONADA";
+			String movs = String.valueOf(resultadoHistorial.getInt("movimientos"));
 			String tiempo = formatearTiempo(resultadoHistorial.getInt("tiempo_segundos"));
 
-			System.out.println(num + ". " + resultado + " | " + movimientos + " movimientos" + " | Tiempo: " + tiempo);
+			System.out.println(fila(aNum, aResultado, aMovs, aTiempo, String.valueOf(num), resultado, movs, tiempo));
 
 			num++;
-			hayPartidas = resultadoHistorial.next();
+			hayFilas = resultadoHistorial.next();
 		}
+
+		System.out.println(sep);
 
 		if (num == 1) {
-			System.out.println("Todavía no tienes partidas.");
+			System.out.println("| Todavia no tienes partidas registradas.          |");
+			System.out.println(sep);
 		}
-
 		System.out.println("========================\n");
 
 		resultadoHistorial.close();
 		consultaHistorial.close();
 	}
 
-	// Convierte segundos a un formato legible para mostrar por pantalla
-	// En la BBDD guardamos segundos en bruto para poder ordenar
-	// pero al jugador le mostramos minutos y segundos porque es más intuitivo
-	// Ejemplo: 125 → "2 min 5 seg"
-	// Ejemplo: 45 → "45 seg"
-	private String formatearTiempo(int segundos) {
+	// ======== MÉTODOS AUXILIARES ========
 
+	// Construye la línea separadora con los anchos de cada columna
+	// Ejemplo: +----+------------------+-----------+
+	private String separador(int... anchos) {
+		String linea = "+";
+		int i = 0;
+		while (i < anchos.length) {
+			int j = 0;
+			while (j < anchos[i]) {
+				linea += "-";
+				j++;
+			}
+			linea += "+";
+			i++;
+		}
+		return linea;
+	}
+
+	// Construye una fila de datos con cada valor ajustado al ancho de su columna
+	// Usamos %-Ns para alinear a la izquierda con N caracteres de ancho
+	// Los anchos recibidos incluyen el espacio de margen
+	// Ejemplo: "| 1 | pepito | 3 |"
+	private String fila(int a1, int a2, int a3, int a4, String v1, String v2, String v3, String v4) {
+		return String.format(
+				"| %-" + (a1 - 2) + "s | %-" + (a2 - 2) + "s | %-" + (a3 - 2) + "s | %-" + (a4 - 2) + "s |", v1, v2, v3,
+				v4);
+	}
+
+	// Sobrecarga para el ranking que tiene 5 columnas
+	private String fila(int a1, int a2, int a3, int a4, int a5, String v1, String v2, String v3, String v4, String v5) {
+		return String.format("| %-" + (a1 - 2) + "s | %-" + (a2 - 2) + "s | %-" + (a3 - 2) + "s | %-" + (a4 - 2)
+				+ "s | %-" + (a5 - 2) + "s |", v1, v2, v3, v4, v5);
+	}
+
+	// Convierte segundos en bruto al formato "X min Y seg" para mostrar al jugador
+	// En la BBDD guardamos segundos para poder ordenar numericamente en el ranking
+	// Ejemplo: 125 → "2 min 5 seg" | 45 → "45 seg"
+	private String formatearTiempo(int segundos) {
 		int minutos = segundos / 60;
 		int segsRestantes = segundos % 60;
 
