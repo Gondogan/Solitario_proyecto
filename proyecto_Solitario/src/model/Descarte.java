@@ -6,7 +6,11 @@ import java.util.List;
 
 public class Descarte {
 
+	//========= ATRIBUTOS =========
+	
 	private List<Carta> cartas;
+	
+	//========= CONSTRUCTOR =======
 	
 	public Descarte() {
 		this.cartas = new ArrayList<>();
@@ -32,6 +36,7 @@ public class Descarte {
 		}
 	}
 	
+	// Añade varias cartas llamando a agregarCarta() por cada una
 	//método complementario al de arriba donde agregamos las cartas a la pila descarte y se van almacenando
 	public void agregarCartas(List<Carta> cartasNuevas) {
 		
@@ -42,7 +47,9 @@ public class Descarte {
 		}
 	}
 	
-	//con este método veremos la última carta agregada a la pila descarte sin quitarla
+	// Mira la última carta sin quitarla (size()-1 porque indexa desde 0)
+    // Devuelve null si el descarte está vacío
+
 	public Carta verUltimaCarta() {
 		if(estaVacio()) {
 			return null;
@@ -51,6 +58,8 @@ public class Descarte {
 		return cartas.get(numeroCartas() - 1);
 	}
 
+    // Quita y devuelve la última carta cuando el jugador la mueve
+	
 	public Carta quitarUltimaCarta() {
 		
 		if(estaVacio()) {
@@ -70,7 +79,9 @@ public class Descarte {
 		return cartas.size();
 	}
 	
-	//método para devolver las cartas de la pila de descarte al mazo en el orden correcto, es decir, de forma inversa a la que se han ido apilando
+	// Devuelve todas las cartas al mazo en orden inverso boca abajo
+    // Collections.reverse() da la vuelta: la última pasa a ser la primera
+
 	public List<Carta> devolverCartasAlMazo(){
 		
 		List<Carta> cartasParaMazo = new ArrayList<>(cartas);
