@@ -89,7 +89,7 @@ public class Main {
     System.out.println("Corazones: " + fCorazones.numeroCartas());
     System.out.println("Diamantes: " + fDiamantes.numeroCartas());
     System.out.println("Treboles:  " + fTreboles.numeroCartas());
-    System.out.println("Picas:     " + fPicas.numeroCartas());*/
+    System.out.println("Picas:     " + fPicas.numeroCartas());
 	
 	
 	

@@ -54,18 +54,18 @@ public class MenuPartida {
     private void mostrarOpciones() {
         String lin = linea(38);
         System.out.println("\n" + lin);
-        System.out.printf("| %-38s|\n", " MENU DE JUEGO");
+        System.out.printf("| %-37s|\n", "           MENU DE JUEGO");
         System.out.println(lin);
-        System.out.printf("| %-38s|\n",
+        System.out.printf("| %-37s|\n",
             " Movimientos: " + partida.getMovimientos()
             + "   Tiempo: " + partida.getTiempoFormateado());
         System.out.println(lin);
-        System.out.printf("| %-38s|\n", " [ 1 ]  Pedir cartas del mazo");
-        System.out.printf("| %-38s|\n", " [ 2 ]  Mover descarte a columna");
-        System.out.printf("| %-38s|\n", " [ 3 ]  Mover columna a columna");
-        System.out.printf("| %-38s|\n", " [ 4 ]  Mover carta a fundacion");
+        System.out.printf("| %-37s|\n", " [ 1 ]  Pedir cartas del mazo");
+        System.out.printf("| %-37s|\n", " [ 2 ]  Mover descarte a columna");
+        System.out.printf("| %-37s|\n", " [ 3 ]  Mover columna a columna");
+        System.out.printf("| %-37s|\n", " [ 4 ]  Mover carta a fundacion");
         System.out.println(lin);
-        System.out.printf("| %-38s|\n", " [ 0 ]  Salir de la partida");
+        System.out.printf("| %-37s|\n", " [ 0 ]  Salir de la partida");
         System.out.println(lin);
     }
  
@@ -164,11 +164,19 @@ public class MenuPartida {
         }
     }
  
-    private void salirDeLaPartida() {
+    private void salirDeLaPartida() throws SQLException {
+
+        // Paramos el tiempo y marcamos como terminada
         partida.terminarPartida();
+
+        // ganada ya es false por defecto, no hace falta cambiarla
+        // La guardamos aunque no haya ganado para que aparezca en el historial
+        DaoPartida.getInstance().guardarPartida(partida);
+
+        System.out.println("Has salido de la partida.");
         System.out.println("Movimientos: " + partida.getMovimientos()
                 + " | Tiempo: " + partida.getTiempoFormateado());
-        System.out.println("La partida no se guarda (no has completado las fundaciones).");
+        System.out.println("La partida se ha guardado en tu historial.");
     }
  
     private void victoria() throws SQLException {
