@@ -23,7 +23,7 @@ public class VistaTablero {
         }
         System.out.println();
 
-        System.out.print("FUNDACIONES:  ");
+        System.out.print("\nFUNDACIONES:  ");
         for (int i = 0; i < tablero.getFundaciones().size(); i++) {
             System.out.print(tablero.getFundaciones().get(i) + "  ");
         }
