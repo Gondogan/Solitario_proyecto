@@ -8,7 +8,8 @@ import java.util.List;
 import dao.DaoMazo;
 
 public class Mazo {
-
+	
+    // Lista de cartas disponibles para robar
 	private List<Carta> cartas = new ArrayList<Carta>();
 	
 	public Mazo() {
@@ -29,11 +30,17 @@ public class Mazo {
 	
 	//=========METODOS MAZO=======================
 	
+	// Baraja el mazo aleatoriamente con Collections.shuffle()
+    // Se llama en Tablero.repartirInicial() antes de repartir
+	
 	public void barajar() {
 		Collections.shuffle(cartas); 
 	}
 	
 	// Método para robar la carta superior
+	// Roba la carta de la posición 0, la quita del mazo y la pone boca arriba
+    // Devuelve null si el mazo está vacío 
+
 	public Carta robarCarta() {
 		if(cartas.isEmpty()) {
 			return null;
@@ -45,7 +52,10 @@ public class Mazo {
 		return cartaRobada;
 	}
 	
-	// Método adaptado con WHILE para evitar el uso del 'break'
+	// Roba varias cartas según la dificultad (1, 2 o 3)
+    // Usamos while con boolean, si el mazo se vacía antes sale del while
+
+	
 	public List<Carta> robarCartas(int cantidad) {
 		List<Carta> cartasRobadas = new ArrayList<>();
 		boolean seguirRobando = true;
@@ -58,7 +68,7 @@ public class Mazo {
 				cartasRobadas.add(carta);
 				i++;
 			} else {
-			    // Si no quedan cartas, apagamos la bandera para salir del bucle limpiamente
+			    // Si no quedan cartas, se pone en false para poder salir 
 				seguirRobando = false; 
 			}
 		}

@@ -1,4 +1,5 @@
 package controller;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import model.ColorCarta;
 import model.Descarte;
 import model.Fundacion;
 import model.Mazo;
+import model.Menu;
 import model.Palo;
 import model.Tablero;
 import model.VistaTablero;
@@ -17,6 +19,27 @@ import model.VistaTablero;
 public class Main {
 	
 	public static void main(String[] args) {
+		
+		// Único punto de entrada del programa
+		// Todos los try-catch están aquí para que el resto del código quede limpio
+		
+		        try {
+		            new Menu().iniciar();
+		 
+		        } catch (SQLException e) {
+		            // Error de conexión o consulta a MySQL
+		            System.out.println("Error de base de datos: " + e.getMessage());
+		 
+		        } catch (NoSuchAlgorithmException e) {
+		            // Error al aplicar SHA-256 (no debería ocurrir en JDK estándar)
+		            System.out.println("Error al cifrar la contraseña: " + e.getMessage());
+		 
+		        } catch (Exception e) {
+		            System.out.println("Error inesperado: " + e.getMessage());
+		        }
+
+		
+		
 		/*
 		// ===== TEST FUNDACION =====
 
@@ -67,29 +90,6 @@ public class Main {
     System.out.println("Diamantes: " + fDiamantes.numeroCartas());
     System.out.println("Treboles:  " + fTreboles.numeroCartas());
     System.out.println("Picas:     " + fPicas.numeroCartas());*/
-	
-		//public static void main(String[] args) {
-
-		    // Creamos el tablero de la partida
-		    Tablero tablero = new Tablero();
-
-		    // Creamos la vista encargada de mostrar el tablero por consola
-		    VistaTablero vistaTablero = new VistaTablero();
-
-		    // Repartimos las cartas iniciales del solitario
-		    tablero.repartirInicial();
-
-		    // Mostramos el tablero recién repartido
-		    vistaTablero.mostrar(tablero);
-
-		    // Probamos pedir 3 cartas del mazo al descarte
-		    tablero.pedirCartasDelMazo(2);
-
-		    System.out.println("\nDespués de pedir cartas del mazo:\n");
-
-		    // Volvemos a mostrar el tablero para ver el cambio
-		    vistaTablero.mostrar(tablero);
-		
 	
 	
 	
